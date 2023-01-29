@@ -1,0 +1,46 @@
+link for Question: https://leetcode.com/problems/data-stream-as-disjoint-intervals/submissions/887291712/
+difficulty: Hard
+language used to solve : Java
+
+class SummaryRanges {
+    TreeMap<Integer, int[]> map;
+
+    public SummaryRanges() {
+         map = new TreeMap<>();
+    }
+    
+    public void addNum(int val) {
+        if(map.containsKey(val)) return;
+        Integer low = map.lowerKey(val);
+        Integer high = map.higherKey(val);
+        if(low != null && high != null && map.get(low)[1] + 1 == val && high == val + 1) {
+            map.get(low)[1] = map.get(high)[1];
+            map.remove(high);
+        } else if(low != null && map.get(low)[1] + 1 >= val) {
+            map.get(low)[1] = Math.max(map.get(low)[1], val);
+        } else if(high != null && high == val + 1) {
+            map.put(val, new int[]{val, map.get(high)[1]});
+            map.remove
+            (high);
+        } else {
+            map.put(val, new int[]{val, val});
+        }
+    }
+    
+    public int[][] getIntervals() {
+        int[][] res = new int[map.size()][2];
+        int i = 0;
+        for(int[] m : map.values()) {
+            res[i] = m;
+            i++;
+        }
+        return res;
+    }
+}
+
+/**
+ * Your SummaryRanges object will be instantiated and called as such:
+ * SummaryRanges obj = new SummaryRanges();
+ * obj.addNum(value);
+ * int[][] param_2 = obj.getIntervals();
+ */
